@@ -1,0 +1,4 @@
+# HTTP requests
+requests>=2.32,<3
+# Load variables from a local .env file
+python-dotenv>=1.0,<2
