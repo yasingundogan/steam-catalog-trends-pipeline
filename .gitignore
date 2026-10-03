@@ -1,0 +1,17 @@
+# Secrets
+.env
+
+# Raw data (no redistribution permission for Steam data)
+data/raw/*
+!data/raw/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
