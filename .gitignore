@@ -5,8 +5,12 @@
 data/raw/*
 !data/raw/.gitkeep
 
+# Database (derived from data/raw - rebuild with: python src/load.py)
+data/*.db
+data/*.db-journal
+
 # Python
-__pycache__/
+_pycache_/
 *.pyc
 .venv/
 venv/
