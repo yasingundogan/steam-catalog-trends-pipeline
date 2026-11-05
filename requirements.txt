@@ -2,3 +2,9 @@
 requests>=2.32,<3
 # Load variables from a local .env file
 python-dotenv>=1.0,<2
+
+# M3 profile notebook only (notebooks/m3_profile.ipynb).
+# src/load.py, src/clean.py and src/validate.py use only the standard library.
+pandas>=2.0
+matplotlib>=3.7
+jupyter>=1.0
