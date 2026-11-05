@@ -317,6 +317,23 @@ Output:
 
 `sql/queries/02_genre_share_by_year.sql` adds the genre view (one row per release year and genre; a game with several genres is counted in each, and the share divides by the games of that year counted before the genre join).
 
+## Data Quality (M3)
+
+The most important finding is a sentinel: Steam writes `review_score = 0` for every game with fewer than 10 reviews (58 of the 100 sampled games), so 0 means "no score shown", not "worst score"; the cleaned layer turns it into NULL with a flag, and positive-share results only describe the 42 games with a usable score. The 27 games without a full release date are all unreleased (7 still give a year), and the 40 missing prices are all free or unreleased games. Two category ids share one label each, one arrives as an untranslated localisation key, `Free To Play` and `Early Access` are not genres, and two publisher names are misspellings of a developer on the same app: every such decision is a reviewed row in `data/mappings/*.csv`. Three games with unusually many reviews (ELEX, Timberman, Life is Strange: Reunion) are flagged and kept. Full report: [docs/cleaning_report.md](docs/cleaning_report.md); profile: [notebooks/m3_profile.ipynb](notebooks/m3_profile.ipynb).
+
+Build and check everything from a fresh clone with the landed raw data:
+
+```bash
+python src/load.py        # raw files -> M2 tables (data/steam_catalog.db)
+python src/clean.py       # M2 tables -> cleaned layer + mapping tables; prints flag counts, STATUS
+python src/validate.py    # 20 expectations: PASS / WARN / STOP; exits 1 on any STOP
+```
+
+- `clean.py` only reads the M2 tables (it fingerprints them before and after every run), rebuilds the cleaned layer in one transaction (a failure rolls everything back), and gives the same tables when run twice. Thresholds are in `src/clean_config.py`, decisions in `data/mappings/`.
+- `python src/validate.py --prove-stops` breaks each STOP check once on a temporary copy and confirms it stops; `--as-of YYYY-MM-DD` fixes the day freshness is measured against.
+- The notebook needs `pip install -r requirements.txt` (pandas, matplotlib, Jupyter) and runs top to bottom on a fresh build: `jupyter nbconvert --to notebook --execute --inplace notebooks/m3_profile.ipynb`.
+- For analysis (M4), use the views: `game_clean_v` (one row per sampled game with its latest review snapshot), `app_genre_clean_v` (genres with their `kind`), `app_company_clean_v` (canonical developer / publisher names) and `app_resolved`.
+
 ## Repository structure
 
 ```
@@ -327,22 +344,30 @@ Output:
 ├── requirements.txt
 ├── sql/
 │   ├── schema.sql          # M2: every table, STRICT, safe to run more than once
+│   ├── clean_schema.sql    # M3: cleaned tables, mapping tables and views (STRICT)
 │   └── queries/            # M2: analytical queries (grain stated at the top)
 ├── src/
 │   ├── ingest.py           # M1: lands raw API responses in data/raw/
-│   ├── db.py               # M2: connect() (foreign keys ON) and shared helpers
+│   ├── db.py               # M2: connect() (foreign keys ON) and shared helpers; M3 tables registered
 │   ├── load.py             # M2: raw files -> database (idempotent, atomic, parameterised)
-│   └── checks.py           # M2: six checks against a temporary copy of the database
+│   ├── checks.py           # M2: six checks against a temporary copy of the database
+│   ├── clean_config.py     # M3: every cleaning / validation threshold, named and commented
+│   ├── clean.py            # M3: M2 tables -> cleaned layer (idempotent, atomic, parameterised)
+│   └── validate.py         # M3: data-quality expectations, PASS / WARN / STOP
+├── notebooks/
+│   └── m3_profile.ipynb    # M3: profile of the M2 tables, committed with outputs
 ├── data/
 │   ├── raw/                # landed responses, exactly as received
-│   └── steam_catalog.db    # built by src/load.py (not committed)
+│   ├── mappings/           # M3: one CSV per decision table (decided_by, decided_at, note)
+│   └── steam_catalog.db    # built by src/load.py + src/clean.py (not committed)
 └── docs/
-    └── sources.md          # data source cards
+    ├── sources.md          # data source cards
+    └── cleaning_report.md  # M3: issues register, flags, decisions, validation
 ```
 
 ## Status
 
-M2 — schema and load complete
+M3 — cleaned layer and quality report complete
 
 ## Team
 
