@@ -1,0 +1,13 @@
+steam_genre_id,description,kind,decided_by,decided_at,note
+1,Action,genre,Yasin Gündoğan,2026-10-27,"gameplay genre"
+2,Strategy,genre,Yasin Gündoğan,2026-10-27,"gameplay genre"
+3,RPG,genre,Yasin Gündoğan,2026-10-27,"gameplay genre"
+4,Casual,genre,Yasin Gündoğan,2026-10-27,"gameplay genre"
+9,Racing,genre,Yasin Gündoğan,2026-10-27,"gameplay genre"
+18,Sports,genre,Yasin Gündoğan,2026-10-27,"gameplay genre"
+23,Indie,genre,Yasin Gündoğan,2026-10-27,"describes the developer, not the gameplay, but Steam lists it as a genre and the M0 question counts it; kept as genre (73 of 100 apps)"
+25,Adventure,genre,Yasin Gündoğan,2026-10-27,"gameplay genre"
+28,Simulation,genre,Yasin Gündoğan,2026-10-27,"gameplay genre"
+29,Massively Multiplayer,genre,Yasin Gündoğan,2026-10-27,"gameplay genre"
+37,Free To Play,business_model,Yasin Gündoğan,2026-10-27,"a price model, not a genre: all 10 apps with it have is_free = 1 (2 more free apps lack it); counting it as a genre would double-count is_free in genre shares"
+70,Early Access,release_status,Yasin Gündoğan,2026-10-27,"a release status, not a genre: 5 apps, all with coming_soon = 0 and release dates 2018-2025; the status can change while the genre does not"

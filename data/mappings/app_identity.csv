@@ -1,0 +1,10 @@
+steam_appid,related_appid,method,decision,basis,decided_by,decided_at,note
+803310,4168700,name_key,separate,unknown,Muhammet Mustafa Sarıbuğa,2026-10-27,"both 'Landlord Simulator'; 4168700 last modified 2026-10-01, 803310 released 2018-12-31; 4168700 is not in the sample, so there is no store page or developer to compare; kept separate, cause unknown"
+1364500,4930190,name_key,separate,unknown,Muhammet Mustafa Sarıbuğa,2026-10-27,"both 'Drive or Die'; 1364500 released 2020-08-31, 4930190 last modified 2026-09-21; no store page for 4930190; kept separate"
+1412620,4618290,name_key,separate,unknown,Muhammet Mustafa Sarıbuğa,2026-10-27,"both 'Sweet Time'; 1412620 released 2020-11-19, 4618290 last modified 2026-07-23; no store page for 4618290; kept separate"
+1548050,2063720,name_key,separate,unknown,Muhammet Mustafa Sarıbuğa,2026-10-27,"both 'Presence' (a common word: three catalogue apps use it); 2063720 last modified 2023-11-14; no store page; kept separate"
+1548050,2378990,name_key,separate,unknown,Muhammet Mustafa Sarıbuğa,2026-10-27,"both 'Presence'; 2378990 last modified 2024-03-20; no store page; kept separate"
+1721100,3710830,name_key,separate,unknown,Muhammet Mustafa Sarıbuğa,2026-10-27,"'CURSES' vs 'Curses' (equal after casefold); 3710830 last modified 2025-10-15, three years after 1721100's release; no store page; kept separate"
+3077710,1278860,name_key,separate,inferred,Muhammet Mustafa Sarıbuğa,2026-10-27,"'Dice' vs 'Di[c]E': equal only because the key drops brackets; 1278860 has the lower appid, so it existed before 3077710 (released 2024-08-10) and cannot be a re-registration of it; kept separate"
+3077710,4940860,name_key,separate,unknown,Muhammet Mustafa Sarıbuğa,2026-10-27,"both 'Dice'; 4940860 last modified 2026-09-22; no store page; kept separate"
+5079930,1423090,name_key,separate,unknown,Muhammet Mustafa Sarıbuğa,2026-10-27,"both 'Monster Collector'; the sampled app 5079930 (released 2026-08-28) is the newer one, 1423090 last modified 2021-02-19; could be a re-registration, but there is no store page or developer for 1423090 to compare; kept separate"
