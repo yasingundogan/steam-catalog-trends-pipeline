@@ -334,6 +334,24 @@ python src/validate.py    # 20 expectations: PASS / WARN / STOP; exits 1 on any 
 - The notebook needs `pip install -r requirements.txt` (pandas, matplotlib, Jupyter) and runs top to bottom on a fresh build: `jupyter nbconvert --to notebook --execute --inplace notebooks/m3_profile.ipynb`.
 - For analysis (M4), use the views: `game_clean_v` (one row per sampled game with its latest review snapshot), `app_genre_clean_v` (genres with their `kind`), `app_company_clean_v` (canonical developer / publisher names) and `app_resolved`.
 
+## Exploration (M4)
+
+![2025-26 games: +13 points vs older, but only 8 of 20 are rated](figures/fig5_cohort_comparison.png)
+
+Across the 42 released games with at least 10 reviews, the median game gets 80.9 % positive reviews; cleaning matters, because the raw tables give 75.5 % (games with 1-9 reviews and the `review_score = 0` sentinel pull it down). *Exploratory:* games released in 2025-26 have a higher median share than older ones (+12.7 points, 95 % bootstrap interval +0.4 to +27.4), but only 8 of the 20 released 2025-26 games are rated so far, the gap shrinks to +6 points (interval across zero) among games with 50+ reviews, and it was the largest of about 14 comparisons we looked at, so it is a hypothesis for later snapshots, not a trend. *Exploratory:* neither popularity nor list price is related to the positive share (Spearman 0.11 and 0.08). Full analysis, coverage rules, flag filters and findings table: [docs/eda_report.md](docs/eda_report.md); notebook: [notebooks/m4_eda.ipynb](notebooks/m4_eda.ipynb).
+
+Reproduce everything from a fresh clone with the landed raw data (`pip install -r requirements.txt` first):
+
+```bash
+python src/load.py
+python src/clean.py
+python src/validate.py
+jupyter nbconvert --to notebook --execute --inplace notebooks/m4_eda.ipynb
+```
+
+- The notebook opens the database read-only, hashes all 23 tables before and after and stops if they differ, and writes the five figures in `figures/`.
+- Parameters (flag filters, cohorts, coverage rules, bin widths, bootstrap seed) are in its first code cell; the queries it reuses are `sql/queries/03`-`07`, loaded by name with bound parameters.
+
 ## Repository structure
 
 ```
@@ -345,7 +363,7 @@ python src/validate.py    # 20 expectations: PASS / WARN / STOP; exits 1 on any 
 ├── sql/
 │   ├── schema.sql          # M2: every table, STRICT, safe to run more than once
 │   ├── clean_schema.sql    # M3: cleaned tables, mapping tables and views (STRICT)
-│   └── queries/            # M2: analytical queries (grain stated at the top)
+│   └── queries/            # M2 + M4: analytical queries (grain and flag filter stated at the top)
 ├── src/
 │   ├── ingest.py           # M1: lands raw API responses in data/raw/
 │   ├── db.py               # M2: connect() (foreign keys ON) and shared helpers; M3 tables registered
@@ -353,21 +371,25 @@ python src/validate.py    # 20 expectations: PASS / WARN / STOP; exits 1 on any 
 │   ├── checks.py           # M2: six checks against a temporary copy of the database
 │   ├── clean_config.py     # M3: every cleaning / validation threshold, named and commented
 │   ├── clean.py            # M3: M2 tables -> cleaned layer (idempotent, atomic, parameterised)
-│   └── validate.py         # M3: data-quality expectations, PASS / WARN / STOP
+│   ├── validate.py         # M3: data-quality expectations, PASS / WARN / STOP
+│   └── explore.py          # M4: read-only connection, saved queries, figure saving, bootstrap
 ├── notebooks/
-│   └── m3_profile.ipynb    # M3: profile of the M2 tables, committed with outputs
+│   ├── m3_profile.ipynb    # M3: profile of the M2 tables, committed with outputs
+│   └── m4_eda.ipynb        # M4: exploratory analysis, committed with outputs
+├── figures/                # M4: written by notebooks/m4_eda.ipynb
 ├── data/
 │   ├── raw/                # landed responses, exactly as received
 │   ├── mappings/           # M3: one CSV per decision table (decided_by, decided_at, note)
 │   └── steam_catalog.db    # built by src/load.py + src/clean.py (not committed)
 └── docs/
     ├── sources.md          # data source cards
-    └── cleaning_report.md  # M3: issues register, flags, decisions, validation
+    ├── cleaning_report.md  # M3: issues register, flags, decisions, validation (+ I-18 from M4)
+    └── eda_report.md       # M4: exploratory analysis report
 ```
 
 ## Status
 
-M3 — cleaned layer and quality report complete
+M4 — exploratory analysis complete
 
 ## Team
 

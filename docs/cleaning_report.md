@@ -98,6 +98,7 @@ For the 58 apps with score 0, `review_score_desc` reads `'No user reviews'` or `
 | I-15 | 1 Missing | app_detail (coverage) | Unequal coverage by year; one run | 1-16 games per year; 2013, 2015, 2023: 1 each | notebook §1 | Confirmed: `MAX_APPS = 100` random sample, one ingest run | no cleaning; M4 must not compare small years | — | Yasin Gündoğan |
 | I-16 | 3 Unusual | review_snapshot.total_reviews | Very many reviews | 3 apps | above the log10 IQR fence (4,504) | Confirmed: well-known games (ELEX, Timberman, Life is Strange: Reunion) | kept | `unusual_high` | Muhammet Mustafa Sarıbuğa |
 | I-17 | 4 Across fields | app_detail.recommendations_total vs review_snapshot.total_reviews | Two review counts that disagree | 9 apps | recommendations are 63-94 % of total reviews | Inferred: we request `purchase_type=all` (key activations included), while Steam counts only Steam purchases toward its score ([Steamworks: user reviews](https://partner.steamgames.com/doc/store/reviews)) | both kept; M4 uses `total_reviews` | — | Muhammet Mustafa Sarıbuğa |
+| I-18 | 4 Sequence | app_detail.release_date | Dates on 31 December (found in M4) | 2 released games: 2017-12-31, 2018-12-31 | M4 notebook §2.5 calendar check; no other date repeats across years | Unknown: could be a placeholder "end of year" date or a real release | kept; a wrong day would not change the release year M4 uses | — | Yasin Gündoğan |
 
 ### Checked and not found
 
